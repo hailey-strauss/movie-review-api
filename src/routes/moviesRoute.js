@@ -1,8 +1,16 @@
 // routes/movieRoutes.js
 import express from "express";
 import Movie from "../models/movieModel.js";
+import authMiddleware from "../middleware/authMiddleware.js";
 
 const router = express.Router();
+
+// Apply authentication middleware to protect movie routes
+router.get("/", authMiddleware, getMovies);
+router.get("/:id", authMiddleware, getMovieById);
+router.post("/", authMiddleware, createMovie);
+router.put("/:id", authMiddleware, updateMovie);
+router.delete("/:id", authMiddleware, deleteMovie);
 
 // POST a new movie
 router.post("/", async (req, res) => {
