@@ -23,30 +23,44 @@ export const getMovieById = async (req, res) => {
 
 // Create a new movie review
 export const createMovie = async (req, res) => {
+  const { title, genre, releaseDate, director, review } = req.body;
+
+  // Validate required fields
+  if (!title || !genre) {
+    return res.status(400).json({ message: "Title and Genre are required" });
+  }
+
   try {
-    const { title, rating, review } = req.body;
-    const newMovie = new Movie({ title, rating, review });
+    const newMovie = new Movie({ title, genre, releaseDate, director, review });
     await newMovie.save();
     res.status(201).json(newMovie);
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    console.error("Error adding movie:", error);
+    res.status(500).json({ message: "Error adding movie", error });
   }
 };
 
-// Update movie rating
+// Update a movie by ID
 export const updateMovie = async (req, res) => {
   try {
-    const { rating } = req.body;
-    const updatedMovie = await Movie.findByIdAndUpdate(
-      req.params.id,
-      { rating },
-      { new: true }
-    );
-    if (!updatedMovie)
+    const { id } = req.params;
+
+    const updatedMovie = await Movie.findByIdAndUpdate(id, req.body, {
+      new: true, // Return the updated document
+      runValidators: true, // Validate the update against the schema
+    });
+
+    if (!updatedMovie) {
       return res.status(404).json({ message: "Movie not found" });
-    res.status(200).json(updatedMovie);
+    }
+
+    // Send a success message along with the updated movie
+    res.status(200).json({
+      message: "Movie updated successfully",
+      updatedMovie, // Include the updated movie data in the response
+    });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: "Failed to update movie", error });
   }
 };
 
