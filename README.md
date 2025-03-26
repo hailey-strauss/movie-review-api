@@ -1,6 +1,6 @@
 # Movie Review API
 
-A simple RESTful API built using Node.js, Express, and MongoDB to store, retrieve, update, and delete movie reviews.
+A secure RESTful API for managing movies and user authentication, built with **Express.js**, **MongoDB**, and **JWT authentication**.
 
 ## Table of Contents
 
@@ -23,7 +23,8 @@ The API uses **MongoDB** as the database to store movie details such as the titl
 
 ## Installation
 
-Follow the steps below to get this project up and running locally.
+git clone <your-repo-url>
+cd movie-review-api
 
 ### Prerequisites
 
@@ -40,7 +41,7 @@ Before you begin, ensure that you have the following installed:
    - Open your terminal/command prompt and navigate to the folder where you want to store the project.
    - Clone the repository:
      ```bash
-     git clone https://github.com/yourusername/movie-review-api.git
+     git clone https://github.com/hailey-strauss/movie-review-api.git
      ```
    - Navigate into the project folder:
      ```bash
@@ -50,8 +51,10 @@ Before you begin, ensure that you have the following installed:
 2. **Install Dependencies**
 
    - Install the necessary packages using `npm`:
+
      ```bash
-     npm install
+     npm install express mongoose dotenv bcrypt jsonwebtoken cors body-parser nodemon
+
      ```
 
 3. **Set Up Environment Variables**
@@ -60,6 +63,7 @@ Before you begin, ensure that you have the following installed:
    - Add the following content to your `.env` file:
      ```
      MONGODB_URI=mongodb+srv://<username>:<password>@<cluster-url>/moviereviews?retryWrites=true&w=majority
+     JWT_SECRET=your-jwt-secret
      PORT=3000
      ```
    - Replace `<username>`, `<password>`, and `<cluster-url>` with your actual MongoDB Atlas credentials.

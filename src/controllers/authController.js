@@ -1,3 +1,5 @@
+// authController.js
+
 import User from "../models/userModel.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
@@ -24,11 +26,11 @@ export const registerUser = async (req, res) => {
   }
 };
 
-// Login user and generate JWT token
+// Login User - Controller function to handle user login
 export const loginUser = async (req, res) => {
-  const { email, password } = req.body;
-
   try {
+    const { email, password } = req.body;
+
     const user = await User.findOne({ email });
 
     if (!user) {
