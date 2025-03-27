@@ -82,47 +82,182 @@ Once the server is running, you can use **Postman** or another API client to int
 ### API Endpoints
 
 Here are the available endpoints you can use:
+Authentication Routes
 
-- **GET** `/api/movies`: Fetch all movies in the database.
-- **GET** `/api/movies/:id`: Fetch a specific movie by its ID.
-- **POST** `/api/movies`: Add a new movie review.
-- **PUT** `/api/movies/:id`: Update an existing movie review by ID.
-- **DELETE** `/api/movies/:id`: Delete a movie review by ID.
+## Register a new user
 
-### Step-by-Step Usage
+POST /api/auth/register → Register a new user
 
-#### 1. Fetch All Movies (GET)
+URL:
 
-To fetch all the movies from the database, open Postman and send a **GET** request to:
+```bash
+http://localhost:3000/api/auth/register
+```
 
-#### 2. Fetch a Specific Movie (GET)
+Body:
+JSON
 
-To fetch a specific movie, send a **GET** request to the following endpoint with the movie’s ID:
-http://localhost:3000/api/movies/<movieId>
-
-Replace `<movieId>` with the actual ID of the movie.
-
-#### 3. Add a New Movie (POST)
-
-To add a new movie, send a **POST** request to the `/api/movies` endpoint:
-
-- URL: http://localhost:3000/api/movies
-
-- Body (JSON format):
-
-```json
+```bash
 {
-  "title": "My Dear",
-  "genre": "Rom-Com",
-  "releaseDate": "2-12-2025",
-  "director": "Hailey Norton",
-  "review": "A cute romance between Hailey and Macen."
+    "username": "john_doe",
+    "email": "john@example.com",
+    "password": "password123"
+}
+```
+
+Response:
+
+```bash
+{
+    "message": "User registered successfully"
+}
+```
+
+### Login User
+
+- Method: POST
+- URL:
+
+```bash
+http://localhost:3000/api/auth/login
+```
+
+Body: JSON
+
+```bash
+{
+    "email": "john@example.com",
+    "password": "password123"
+}
+```
+
+Response:
+
+```bash
+{
+    "token": "<your-jwt-token>"
+}
+```
+
+## Movies
+
+GET /api/movies → Get all movies
+
+Authorization: Bearer <jwt_token>
+Response:
+
+```bash
+{
+"_id": "65c2f817b2e4a6b7f7d4b12c",
+"title": "Inception",
+"genre": "Sci-Fi",
+"releaseDate": "2010-07-16",
+"director": "Christopher Nolan",
+"review": "Mind-bending masterpiece"
+}
+```
+
+- GET /api/movies/:id → Get a movie by ID
+
+Headers:
+Authorization: Bearer <jwt_token>
+Response:
+
+```bash
+{
+"\_id": "65c2f817b2e4a6b7f7d4b12c",
+"title": "Inception",
+"genre": "Sci-Fi",
+"releaseDate": "2010-07-16",
+"director": "Christopher Nolan",
+"review": "Mind-bending masterpiece"
+}
+```
+
+- POST /api/movies → Add a new movie
+
+Headers:
+Authorization: Bearer <jwt_token>
+Body:
+
+```bash
+{
+"title": "Interstellar",
+"genre": "Sci-Fi",
+"releaseDate": "2014-11-07",
+"director": "Christopher Nolan",
+"review": "Amazing space exploration movie"
+}
+```
+
+Response:
+
+```bash
+{
+"message": "Movie added successfully",
+"movie": {
+"\_id": "65c3f817b2e4a6b7f7d4b12c",
+"title": "Interstellar",
+"genre": "Sci-Fi",
+"releaseDate": "2014-11-07",
+"director": "Christopher Nolan",
+"review": "Amazing space exploration movie"
+}
+```
+
+- PUT /api/movies/:id → Update a movie by ID
+
+Headers:
+Authorization: Bearer <jwt_token>
+Body:
+
+```bash
+{
+"title": "Interstellar",
+"genre": "Sci-Fi Adventure",
+"releaseDate": "2014-11-07",
+"director": "Christopher Nolan",
+"review": "A mind-blowing exploration of space, time, and love."
+}
+```
+
+Response:
+
+```bash
+{
+"message": "Movie updated successfully",
+"updatedMovie": {
+"\_id": "65c2f817b2e4a6b7f7d4b12c",
+"title": "Interstellar",
+"genre": "Sci-Fi Adventure",
+"releaseDate": "2014-11-07",
+"director": "Christopher Nolan",
+"review": "A mind-blowing exploration of space, time, and love."
+}
+```
+
+- DELETE /api/movies/:id → Delete a movie by ID
+
+Headers:
+
+Authorization: Bearer <jwt_token>
+Response:
+
+```bash
+
+{
+"message": "Movie deleted successfully"
 }
 ```
 
 ## Technologies Used
 
 Node.js: JavaScript runtime for building the API.
-Express.js: Web framework for Node.js used to build the API.
-MongoDB: Database used to store movie reviews.
-Mongoose: ODM (Object Data Modeling) library for MongoDB and Node.js.
+
+- Express.js: Web framework for Node.js used to build the API.
+- MongoDB: Database used to store movie reviews.
+- Mongoose: ODM (Object Data Modeling) library for MongoDB and Node.js.
+- JWT (JSON Web Token): For handling secure user authentication and authorization.
+- bcrypt: Library to hash passwords for secure storage.
+- dotenv: Loads environment variables from a .env file to keep sensitive data like JWT secrets.
+- CORS (Cross-Origin Resource Sharing): Middleware to handle cross-origin requests and enable API accessibility from different domains.
