@@ -18,11 +18,6 @@ app.get("/", (req, res) => {
   res.send("API is running...");
 });
 
-// Authentication routes (no middleware needed)
-app.use("/api/auth", authRoutes);
-
-// Protected movie routes
-app.use("/api/movies", authMiddleware, moviesRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

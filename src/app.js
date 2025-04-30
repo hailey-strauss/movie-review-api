@@ -28,6 +28,11 @@ app.post("/movies", async (req, res) => {
     res.status(500).json({ message: "Error adding movie", error });
   }
 });
+// Authentication routes (no middleware needed)
+app.use("/api/auth", authRoutes);
+
+// Protected movie routes
+app.use("/api/movies", authMiddleware, moviesRoutes);
 
 // Server setup
 app.listen(3000, () => {
