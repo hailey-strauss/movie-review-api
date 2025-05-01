@@ -5,7 +5,6 @@ import authMiddleware from "./middleware/authMiddleware.js";
 import moviesRoutes from "./routes/moviesRoute.js";
 import cors from "cors";
 
-const app = express();
 app.use(express.json());
 app.use(cors());
 

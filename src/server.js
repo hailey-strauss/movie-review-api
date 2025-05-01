@@ -14,7 +14,6 @@ dotenv.config();
 // Initialize DB only once
 await connectDB();
 
-const app = express();
 app.use(express.json());
 app.use(cors());
 
