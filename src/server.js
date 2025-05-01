@@ -1,28 +1,23 @@
 // src/server.js
-import express from "express";
-import connectDB from "./config/db.js";
+
 import dotenv from "dotenv";
-import authRoutes from "./routes/authRoute.js";
-import moviesRoutes from "./routes/moviesRoute.js";
-import authMiddleware from "./middleware/authMiddleware.js";
-import cors from "cors";
-import app from "./app.js"; // import the app
+import connectDB from "./config/db.js";
+import app from "./app.js"; // ✅ import the app you defined
 
-// Run dotenv (important!)
 dotenv.config();
-
-// Initialize DB only once
 await connectDB();
 
-app.use(express.json());
-app.use(cors());
+// Do NOT use app.listen() in Vercel (it deploys as serverless function)
 
+// Optional root route
 app.get("/", (req, res) => {
   res.send("API is running...");
 });
 
-app.use("/api/auth", authRoutes);
-app.use("/api/movies", authMiddleware, moviesRoutes);
+// Error handler
+app.use((err, req, res, next) => {
+  console.error("Middleware Error:", err.message);
+  res.status(500).json({ error: "Server Error" });
+});
 
-// Export the app as a Vercel handler
 export default app;
