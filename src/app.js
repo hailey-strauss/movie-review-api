@@ -3,6 +3,9 @@
 import express from "express";
 import mongoose from "mongoose";
 import Movie from "./models/movieModel.js"; // Import your Movie model
+import authRoutes from "./routes/authRoute.js"; // Import your authentication routes
+import authMiddleware from "./middleware/authMiddleware.js"; // Import your authentication middleware
+import moviesRoutes from "./routes/moviesRoute.js"; // Import your movie routes
 
 const app = express();
 
