@@ -1,43 +1,42 @@
-// src/server.js or src/app.js
-
 import express from "express";
-import mongoose from "mongoose";
-import Movie from "./models/movieModel.js"; // Import your Movie model
-import authRoutes from "./routes/authRoute.js"; // Import your authentication routes
-import authMiddleware from "./middleware/authMiddleware.js"; // Import your authentication middleware
-import moviesRoutes from "./routes/moviesRoute.js"; // Import your movie routes
+import Movie from "./models/movieModel.js";
+import authRoutes from "./routes/authRoute.js";
+import authMiddleware from "./middleware/authMiddleware.js";
+import moviesRoutes from "./routes/moviesRoute.js";
+import cors from "cors";
 
 const app = express();
-
-// Middleware to parse JSON requests
 app.use(express.json());
+app.use(cors());
 
-// POST route to add a new movie
+// Default route
+app.get("/", (req, res) => {
+  res.send("API is running...");
+});
+
+// POST route to add a new movie (unauthenticated)
 app.post("/movies", async (req, res) => {
   const { title, genre, releaseDate, director, review } = req.body;
 
   try {
-    const movie = new Movie({
-      title,
-      genre,
-      releaseDate,
-      director,
-      review,
-    });
-
-    await movie.save(); // Save the movie to MongoDB
-    res.status(201).json(movie); // Respond with the newly created movie
+    const movie = new Movie({ title, genre, releaseDate, director, review });
+    await movie.save();
+    res.status(201).json(movie);
   } catch (error) {
     res.status(500).json({ message: "Error adding movie", error });
   }
 });
-// Authentication routes (no middleware needed)
+
+// Auth routes (public)
 app.use("/api/auth", authRoutes);
 
 // Protected movie routes
 app.use("/api/movies", authMiddleware, moviesRoutes);
 
-// Server setup
-app.listen(3000, () => {
-  console.log("Server is running on http://localhost:3000");
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error("App Error:", err.message);
+  res.status(500).json({ error: "Server Error" });
 });
+
+export default app;
