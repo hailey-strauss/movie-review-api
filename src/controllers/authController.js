@@ -1,41 +1,13 @@
-// authController.js
-import User from "../models/userModel.js";
-import bcrypt from "bcryptjs";
+// authRoute.js
+import { Router } from "express";
+import { registerUser, loginUser } from "../controllers/authController.js"; // Correct import
 
-export const registerUser = async (req, res) => {
-  const { username, email, password } = req.body;
+const router = Router();
 
-  try {
-    // Check if user already exists
-    const userExists = await User.findOne({ email });
-    if (userExists) {
-      return res.status(400).json({ message: "User already exists" });
-    }
+// Route for registering a new user
+router.post("/register", registerUser);
 
-    // Hash password
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
+// Route for logging in a user
+router.post("/login", loginUser);
 
-    // Create new user
-    const newUser = new User({
-      username,
-      email,
-      password: hashedPassword,
-    });
-
-    // Save the new user
-    await newUser.save();
-
-    res.status(201).json({
-      message: "User registered successfully",
-      user: {
-        _id: newUser._id,
-        username: newUser.username,
-        email: newUser.email,
-      },
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Server error", error });
-  }
-};
+export default router;
