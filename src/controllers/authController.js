@@ -1,15 +1,9 @@
 // authController.js
 import User from "../models/userModel.js";
 import bcrypt from "bcryptjs";
-import { validationResult } from "express-validator"; // If using express-validator
 
 export const registerUser = async (req, res) => {
   const { username, email, password } = req.body;
-
-  // Validate request body
-  if (!username || !email || !password) {
-    return res.status(400).json({ message: "Missing required fields" });
-  }
 
   try {
     // Check if user already exists
@@ -18,7 +12,7 @@ export const registerUser = async (req, res) => {
       return res.status(400).json({ message: "User already exists" });
     }
 
-    // Hash the password
+    // Hash password
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
