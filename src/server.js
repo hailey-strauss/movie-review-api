@@ -1,9 +1,10 @@
+// src/server.js
 import express from "express";
-import connectDB from "../src/config/db.js"; // Ensure correct path
+import connectDB from "./config/db.js";
 import dotenv from "dotenv";
-import authRoutes from "./routes/authRoute.js"; // Auth routes
-import moviesRoutes from "./routes/moviesRoute.js"; // Movie routes
-import authMiddleware from "./middleware/authMiddleware.js"; // Middleware
+import authRoutes from "./routes/authRoute.js";
+import moviesRoutes from "./routes/moviesRoute.js";
+import authMiddleware from "./middleware/authMiddleware.js";
 import cors from "cors";
 
 dotenv.config();
@@ -13,13 +14,19 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-// Test route
 app.get("/", (req, res) => {
   res.send("API is running...");
 });
 
+app.use("/api/auth", authRoutes);
+app.use("/api/movies", authMiddleware, moviesRoutes);
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-});
+// Only use listen() locally, NEVER in Vercel
+if (process.env.NODE_ENV !== "production") {
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}`);
+  });
+}
+
+export default app;
