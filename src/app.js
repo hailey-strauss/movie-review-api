@@ -8,7 +8,7 @@ import authRoutes from "./routes/authRoute.js";
 import moviesRoutes from "./routes/moviesRoute.js";
 import authMiddleware from "./middleware/authMiddleware.js";
 
-const app = express(); // ✅ Must come BEFORE any app.use() or app.post()
+const app = express(); // Must come BEFORE any app.use() or app.post()
 
 app.use(express.json());
 app.use(cors());

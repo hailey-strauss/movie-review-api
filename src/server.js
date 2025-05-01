@@ -2,7 +2,7 @@
 
 import dotenv from "dotenv";
 import connectDB from "./config/db.js";
-import app from "./app.js"; // ✅ import the app you defined
+import app from "./app.js"; // import the app you defined
 
 dotenv.config();
 await connectDB();
