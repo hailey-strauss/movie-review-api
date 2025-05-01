@@ -1,23 +1,23 @@
 // src/server.js
 
+import express from "express";
+import cors from "cors"; // If you're using CORS
 import dotenv from "dotenv";
-import connectDB from "./config/db.js";
-import app from "./app.js"; // import the app you defined
+import authRoute from "./routes/authRoute.js"; // Correct path to your authRoute.js
 
-dotenv.config();
-await connectDB();
+dotenv.config(); // To load environment variables
 
-// Do NOT use app.listen() in Vercel (it deploys as serverless function)
+const app = express();
 
-// Optional root route
-app.get("/", (req, res) => {
-  res.send("API is running...");
+// Middleware
+app.use(express.json()); // To parse JSON requests
+app.use(cors()); // If you need CORS enabled (for API requests from frontend)
+
+// Register routes
+app.use("/api/auth", authRoute); // Make sure you're using "/api/auth" as the base URL
+
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
-
-// Error handler
-app.use((err, req, res, next) => {
-  console.error("Middleware Error:", err.message);
-  res.status(500).json({ error: "Server Error" });
-});
-
-export default app;
